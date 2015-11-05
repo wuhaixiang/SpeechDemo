@@ -1,8 +1,10 @@
 package com.iflytek.voicedemo;
 
 import com.iflytek.speech.util.ApkInstaller;
+import com.wu.service.AsrService;
 import com.wu.service.TtsService;
 
+import android.R.array;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
@@ -21,6 +23,7 @@ public class MainActivity extends Activity implements OnClickListener {
 
 	private Toast mToast;
 	private TtsService ttsService ;
+	private AsrService asrService;
 	// 语记安装助手类
 	public ApkInstaller mInstaller ;
 	@SuppressLint("ShowToast")
@@ -34,7 +37,12 @@ public class MainActivity extends Activity implements OnClickListener {
 		((ListView) findViewById(R.id.listview_main)).setAdapter(listitemAdapter);
 		mInstaller = new  ApkInstaller(MainActivity.this);
 		ttsService = new TtsService(MainActivity.this,mInstaller);
+		asrService = new AsrService(MainActivity.this, mInstaller);
 		
+	}
+	private void test_asr() {
+		asrService.isr_grammar();
+		asrService.isr_recognize();
 	}
 	@Override
 	public void onClick(View view) {
@@ -42,9 +50,9 @@ public class MainActivity extends Activity implements OnClickListener {
 		Intent intent = null;
 		switch (tag) {
 		case 0:
+			this.test_asr();
 			// 语法识别
-			//this.test();
-			intent = new Intent(MainActivity.this, AsrDemo.class);
+		//	intent = new Intent(MainActivity.this, AsrDemo.class);
 			break;
 		case 1:
 			ttsService.tts_cfg();
@@ -96,12 +104,6 @@ public class MainActivity extends Activity implements OnClickListener {
 		}
 	}
 	
-	@Override
-	protected void onStart() {
-		// TODO 自动生成的方法存根
-		super.onStart();
-		//this.test();
-	}
 	private void showTip(final String str) {
 		mToast.setText(str);
 		mToast.show();
